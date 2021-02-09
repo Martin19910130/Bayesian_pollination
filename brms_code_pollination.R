@@ -57,17 +57,16 @@ ggplot(dia_dat, aes(y = Seeds_capsule, x = climate, fill = treatment)) + geom_bo
 
 # NLME -----------------------------------------------------------
 
-
+# I suggest removing correlation structure
+# This does not fit this model, but rather defaults to corAR1(form=~1)
+# So, this will not be helpful (correlation need be among individual measurements)
 dia_lme <- lme(Seeds_capsule ~ climate * treatment * season,
-               random = ~ 1 |individual_id/plot_id/climate, 
-               # correlation =  corAR1(),
+               random = ~ 1 | individual_id/plot_id/climate,
+               correlation = corAR1(form=~1|individual_id),
                data = dia_dat
                )
 
-
+# scabiosa
 sca_mod <-  lme(seeds_flowerhead ~ climate * treatment * season,
                                    random = ~ 1 |individual_id/plot_id/climate,
-                                   # (1|plot_id/climate) + 
-                                   # (1|individual_id/plot_id/climate) + 
-                                   # ar(gr = individual_id), 
                 data = sca_dat)
