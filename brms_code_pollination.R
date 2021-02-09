@@ -62,11 +62,12 @@ ggplot(dia_dat, aes(y = Seeds_capsule, x = climate, fill = treatment)) + geom_bo
 # So, this will not be helpful (correlation need be among individual measurements)
 dia_lme <- lme(Seeds_capsule ~ climate * treatment * season,
                random = ~ 1 | individual_id/plot_id/climate,
-               correlation = corAR1(form=~1|individual_id),
+               correlation = corAR1(form=~1|individual_id/plot_id/climate),
                data = dia_dat
                )
 
 # scabiosa
 sca_mod <-  lme(seeds_flowerhead ~ climate * treatment * season,
-                                   random = ~ 1 |individual_id/plot_id/climate,
+                random = ~ 1 |individual_id/plot_id/climate,
+                correlation = corAR1(form=~1|individual_id/plot_id/climate),
                 data = sca_dat)
